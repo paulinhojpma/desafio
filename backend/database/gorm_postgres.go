@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -12,6 +13,40 @@ type gormPostgres struct {
 	db *gorm.DB
 }
 
+type Transacao struct {
+	gorm.Model
+	//ID         int
+	TipoID     int
+	Tipo       TipoTransacao `gorm:"foreignKey:TipoID"`
+	Data       time.Time
+	Produto    string
+	Valor      float64
+	ProdutorID int
+}
+
+type TipoTransacao struct {
+	Tipo      int `gorm:"primaryKey"`
+	Descricao string
+	Natureza  string
+}
+
+type Produtor struct {
+	ID         int
+	Nome       string
+	Transacoes []Transacao
+}
+
+func (Transacao) TableName() string {
+	return "TRANSCAO"
+}
+
+func (TipoTransacao) TableName() string {
+	return "TIPO_TRANSACAO"
+}
+
+func (Produtor) TableName() string {
+	return "PRODUTOR"
+}
 func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	i := 0
 
@@ -36,30 +71,50 @@ func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	return nil
 }
 
-func (gm *gormPostgres) GetPlanet(key interface{}) (Planet, error) {
-	planet := &Planet{}
-	result := gm.db.First(planet, key.(int))
-
-	return *planet, result.Error
+func (gm *gormPostgres) GetTransacao(key interface{}) (Produtor, error) {
+	produtor := &Produtor{}
+	result := gm.db.Preload("Transacoes").Preload("Transacoes.Tipo").First(produtor, key.(int))
+	return *produtor, result.Error
 }
-func (gm *gormPostgres) CreatePlanet(value interface{}) error {
-	result := gm.db.Create(value)
-	return result.Error
-}
+func (gm *gormPostgres) CreateTransacao(produtor *Produtor) error {
 
-func (gm *gormPostgres) ListPlanets() ([]Planet, error) {
-	planets := make([]Planet, 0)
-	result := gm.db.Find(&planets)
-	return planets, result.Error
+	if err := gm.createProdutor(produtor); err != nil {
+		return err
+	}
 
+	return nil
 }
 
-func (gm *gormPostgres) UpdatePlanet(planet Planet) error {
+func (gm *gormPostgres) ListTransacao() ([]Produtor, error) {
+	produtores := make([]Produtor, 0)
+	result := gm.db.Preload("Transacoes").Preload("Transacoes.Tipo").Find(&produtores)
+	return produtores, result.Error
 
-	result := gm.db.Model(&planet).Updates(planet)
-	return result.Error
 }
-func (gm *gormPostgres) DeletePlanet(key interface{}) error {
-	result := gm.db.Delete(&Planet{}, key)
-	return result.Error
+
+func (gm *gormPostgres) createProdutor(produtor *Produtor) error {
+	prd := &Produtor{}
+	err := gm.db.Where("nome = ?", produtor.Nome).First(prd).Error
+	if err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return err
+		}
+
+	}
+	if prd.ID > 0 {
+		produtor.ID = prd.ID
+		fmt.Println("ID PRD ", produtor.ID)
+		return nil
+	}
+
+	return gm.db.Create(produtor).Error
+
 }
+
+// func (gm *gormPostgres) getProdutor(tipoID int)(TipoTransacao, error){
+
+// 		tipoTrans := &TipoTransacao{}
+
+// 		gm.db.G
+
+// }
