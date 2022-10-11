@@ -49,7 +49,7 @@ func (Produtor) TableName() string {
 }
 func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	i := 0
-
+	fmt.Println("DB URL - ", config.URL)
 	for {
 		db, err := gorm.Open(postgres.Open(config.URL), &gorm.Config{})
 		if err != nil {
@@ -76,12 +76,16 @@ func (gm *gormPostgres) GetTransacao(key interface{}) (Produtor, error) {
 	result := gm.db.Preload("Transacoes").Preload("Transacoes.Tipo").First(produtor, key.(int))
 	return *produtor, result.Error
 }
-func (gm *gormPostgres) CreateTransacao(produtor *Produtor) error {
-
-	if err := gm.createProdutor(produtor); err != nil {
-		return err
+func (gm *gormPostgres) CreateTransacao(produtores []*Produtor) error {
+	tx := gm.db.Begin()
+	for _, produtor := range produtores {
+		if err := gm.createProdutor(produtor, tx); err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
+	defer tx.Commit()
 	return nil
 }
 
@@ -92,7 +96,7 @@ func (gm *gormPostgres) ListTransacao() ([]Produtor, error) {
 
 }
 
-func (gm *gormPostgres) createProdutor(produtor *Produtor) error {
+func (gm *gormPostgres) createProdutor(produtor *Produtor, tx *gorm.DB) error {
 	prd := &Produtor{}
 	err := gm.db.Where("nome = ?", produtor.Nome).First(prd).Error
 	if err != nil {
@@ -103,11 +107,10 @@ func (gm *gormPostgres) createProdutor(produtor *Produtor) error {
 	}
 	if prd.ID > 0 {
 		produtor.ID = prd.ID
-		fmt.Println("ID PRD ", produtor.ID)
 		return nil
 	}
 
-	return gm.db.Create(produtor).Error
+	return tx.Create(produtor).Error
 
 }
 

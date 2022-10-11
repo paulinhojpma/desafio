@@ -43,7 +43,7 @@ func TestCreateTransacao(t *testing.T) {
 	}
 
 	prod.Transacoes = []Transacao{*trans}
-	err := db.CreateTransacao(prod)
+	err := db.CreateTransacao([]*Produtor{prod})
 	if err != nil {
 		t.Error("Expect nil, got ", err)
 	}

@@ -15,8 +15,8 @@ var (
 func Router(h *Handler) *mux.Router {
 	ExcludeRoutes = make([]string, 0)
 	router := core.Router()
-	// router.HandleFunc("/transacoes", h.CadastrarPlaneta).Methods("POST")
-	// router.HandleFunc("/transacoes", h.ListarPlanetas).Methods("GET")
+	router.HandleFunc("/transacoes", h.CadastrarTransacoes).Methods("POST")
+	router.HandleFunc("/transacoes", h.ListarTransacoes).Methods("GET")
 
 	excludeRoutes()
 
@@ -30,10 +30,8 @@ func excludeRoutes() {
 // RouterTest ...
 func RouterTest(h *Handler) *mux.Router {
 	router := core.Router()
-	// router.HandleFunc("/planetas", h.CadastrarPlaneta).Methods("POST")
-	// router.HandleFunc("/planetas", h.ListarPlanetas).Methods("GET")
-	// router.HandleFunc("/planetas/{idPlaneta}", h.GetPlaneta).Methods("GET")
-	// router.HandleFunc("/planetas/{idPlaneta}", h.DeletePlaneta).Methods("DELETE")
+	router.HandleFunc("/transacoes", h.CadastrarTransacoes).Methods("POST")
+	router.HandleFunc("/transacoes", h.ListarTransacoes).Methods("GET")
 
 	return router
 }

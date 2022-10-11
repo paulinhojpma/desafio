@@ -31,7 +31,7 @@ func TestHandleTransactionData(t *testing.T) {
 	produtores, err := handleTransactionData(file)
 	bit, _ := json.Marshal(produtores)
 	fmt.Println(string(bit))
-	if err == nil {
+	if err != nil {
 		t.Error("Expect nil, got ", err)
 	}
 

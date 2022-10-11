@@ -11,7 +11,7 @@ import (
 type IDataBase interface {
 	connectService(config *OptionsDBClient) error
 	GetTransacao(key interface{}) (Produtor, error)
-	CreateTransacao(produtor *Produtor) error
+	CreateTransacao(produtores []*Produtor) error
 	ListTransacao() ([]Produtor, error)
 }
 

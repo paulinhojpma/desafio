@@ -15,8 +15,11 @@ func handleTransactionData(data string) ([]*database.Produtor, error) {
 	dictProd := map[string]*database.Produtor{}
 	produtores := make([]*database.Produtor, 0)
 	for index, line := range lines {
-
+		fmt.Printf("Linha - %d | %s | %d\n", index+1, line, len(line))
 		produtor := &database.Produtor{}
+		if len(line) == 0 {
+			break
+		}
 		// if len(line) != 86 {
 		// 	return nil, errors.New(fmt.Sprintf("Formato do arquivo inválido na linha %d com tamanho de caracteres diferente de 86", index+1))
 		// }
@@ -41,7 +44,9 @@ func handleTransactionData(data string) ([]*database.Produtor, error) {
 		}
 
 		transacao.Produto = strings.TrimSpace(line[26:56])
-		transacao.Valor, err = strconv.ParseFloat(line[56:66], 64)
+		valorFull := line[56:66]
+		valorFull = valorFull[0:len(valorFull)-2] + "." + valorFull[len(valorFull)-2:]
+		transacao.Valor, err = strconv.ParseFloat(valorFull, 64)
 		if err != nil {
 			return nil, errors.New(fmt.Sprintf("Formato do valor da transação inválido na linha %d", index+1))
 		}

@@ -2,6 +2,14 @@
 version: '3.9'
 
 services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    ports:
+      - "8890:8890"
+    depends_on:
+      - postgres
   postgres:
     image: 'postgres:14.5-alpine'
     environment:

@@ -1,0 +1,11 @@
+{
+  "service": "api",  
+  "port": 8890,
+  "allowedParam": "{\"Origins\":[\"*\"],\"Headers\":[\"*\"],\"Methods\":[\"GET\",\"POST\",\"PUT\"]}",
+
+
+ 
+  "db-driver": "postgres",
+  "db-host": "postgresql://root:luke@desafio-postgres-1:5432/app"
+
+}
