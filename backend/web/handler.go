@@ -52,13 +52,17 @@ func (h *Handler) CreateTransactions(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) ListarTransacoes(w http.ResponseWriter, r *http.Request) {
 
-	produtores, err := (*h.Database).ListTransaction()
+	producers, err := (*h.Database).ListTransaction()
 	if err != nil {
 		h.CoreRespondErro(w, r, "", err, "Erro ao listar transactions", http.StatusInternalServerError)
 		return
 	}
+	producers = sumProducersTransactions(producers)
+
+	bit,_ := json.Marshal(producers)
+	fmt.Println(string(bit))
 	response := ProdutoresResponse{
-		Producers: produtores,
+		Producers: producers,
 		ResponseBodyJSONDefault: ResponseBodyJSONDefault{
 			CodResponse: http.StatusOK,
 			Message:     "Transações retornadas com sucesso",

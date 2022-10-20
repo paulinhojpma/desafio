@@ -34,6 +34,7 @@ type Producer struct {
 	ID           int
 	Name         string
 	Transactions []Transaction
+	SumTotal     float64
 }
 
 func (Transaction) TableName() string {

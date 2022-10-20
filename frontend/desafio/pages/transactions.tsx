@@ -15,9 +15,9 @@
 
 export default function PageWithJSbasedForm() {
   // Handles the submit event on form submit.
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     // Stop the form from submitting and refreshing the page.
-    event.preventDefault()
+   event.preventDefault()
 
     // Get data from the form.
     const data = {
@@ -33,7 +33,7 @@ export default function PageWithJSbasedForm() {
     const endpoint = 'http://localhost:8890/transactions'
 
     // Form the request for sending data to the server.
-    const options = {
+    var options = {
       // The method is POST because we are sending data.
       method: 'POST',
       // Tell the server we're sending JSON.
@@ -51,8 +51,16 @@ export default function PageWithJSbasedForm() {
     // Get the response data from server as JSON.
     // If server returns the name submitted, that means the form works.
     const result = await response.json()
-    console.log(result.codResponse)
-    alert(`Transaction complete: ${result}`)
+    console.log(JSON.stringify(result))
+   // alert(`Transaction complete: ${result.codResponse}`)
+    var options1 = {
+    method: 'GET',
+   }
+
+   const response1 = await fetch(endpoint, options1)
+   const result1 = response1.json()
+   result1.producers.forEach(element => console.log(element))
+   
   }
   return (
     // We pass the event to the handleSubmit() function on submit.

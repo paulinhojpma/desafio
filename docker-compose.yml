@@ -11,6 +11,16 @@ services:
     depends_on:
       - postgres
       - pgadmin
+      - front
+  front:
+    build:
+      dockerfile: Dockerfile
+      context: ./frontend/desafio
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - pgadmin
   postgres:
     image: 'postgres:14.5-alpine'
     environment:

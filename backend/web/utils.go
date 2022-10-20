@@ -54,3 +54,19 @@ func handleTransactionData(data string) ([]*database.Producer, error) {
 	}
 	return producers, nil
 }
+
+func sumProducersTransactions(producers []database.Producer) []database.Producer {
+
+	for i, _ := range producers {
+		for _, transaction := range producers[i].Transactions {
+
+			if transaction.Type.Nature == "Entrada" {
+				producers[i].SumTotal += transaction.Value
+			} else {
+				producers[i].SumTotal -= transaction.Value
+			}
+		}
+		fmt.Println("Sum total - ", producers[i].SumTotal)
+	}
+	return producers
+}
