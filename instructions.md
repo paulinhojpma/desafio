@@ -69,17 +69,17 @@ Sua aplicação não precisa, mas ficaremos impressionados se ela:
 
 | Campo    | Início | Fim | Tamanho | Descrição                      |
 | -------- | ------ | --- | ------- | ------------------------------ |
-| Tipo     | 1      | 1   | 1       | Tipo da transação              |
-| Data     | 2      | 26  | 25      | Data - ISO Date + GMT          |
-| Produto  | 27     | 56  | 30      | Descrição do produto           |
-| Valor    | 57     | 66  | 10      | Valor da transação em centavos |
-| Vendedor | 67     | 86  | 20      | Nome do vendedor               |
+| Type     | 1      | 1   | 1       | Type da transação              |
+| Date     | 2      | 26  | 25      | Date - ISO Date + GMT          |
+| Product  | 27     | 56  | 30      | Descrição do produto           |
+| Value    | 57     | 66  | 10      | Value da transação em centavos |
+| Vendedor | 67     | 86  | 20      | Name do vendedor               |
 
 ### Tipos de transação
 
-Esses são os valores possíveis para o campo Tipo:
+Esses são os valores possíveis para o campo Type:
 
-| Tipo | Descrição         | Natureza | Sinal |
+| Type | Descrição         | Nature | Sinal |
 | ---- | ----------------- | -------- | ----- |
 | 1    | Venda produtor    | Entrada  | +     |
 | 2    | Venda afiliado    | Entrada  | +     |

@@ -12,7 +12,7 @@ func initDataBase() (IDataBase, error) {
 		URL:    "postgresql://root:luke@localhost:5434/app",
 		Driver: "postgres",
 	}
-	db, err := DBOpt.ConfiguraDatabase()
+	db, err := DBOpt.ConfigDatabase()
 	return *db, err
 
 }
@@ -25,50 +25,50 @@ func TestInitConnection(t *testing.T) {
 	}
 }
 
-func TestCreateTransacao(t *testing.T) {
+func TestCreateTransaction(t *testing.T) {
 	db, _ := initDataBase()
 
-	trans := &Transacao{
-		Tipo: TipoTransacao{
-			Tipo: 4,
+	trans := &Transaction{
+		Type: TypeTransaction{
+			Type: 4,
 		},
-		TipoID:  1,
-		Data:    time.Now(),
-		Produto: "outro",
-		Valor:   6.8,
+		TypeID:  1,
+		Date:    time.Now(),
+		Product: "outro",
+		Value:   6.8,
 	}
 
-	prod := &Produtor{
-		Nome: "klebernilton",
+	prod := &Producer{
+		Name: "klebernilton",
 	}
 
-	prod.Transacoes = []Transacao{*trans}
-	err := db.CreateTransacao([]*Produtor{prod})
+	prod.Transactions = []Transaction{*trans}
+	err := db.CreateTransaction([]*Producer{prod})
 	if err != nil {
 		t.Error("Expect nil, got ", err)
 	}
 
 }
 
-func TestGetTransacao(t *testing.T) {
+func TestGetTransaction(t *testing.T) {
 	db, _ := initDataBase()
 
-	trans, err := db.GetTransacao(4)
+	trans, err := db.GetTransaction(4)
 	byt, err := json.Marshal(trans)
 	fmt.Println(string(byt))
-	if err == nil {
+	if err != nil {
 		t.Error("Expect nil, got ", err)
 	}
 
 }
 
-func TestListTransacao(t *testing.T) {
+func TestListTransaction(t *testing.T) {
 	db, _ := initDataBase()
 
-	trans, err := db.ListTransacao()
+	trans, err := db.ListTransaction()
 	byt, err := json.Marshal(trans)
 	fmt.Println(string(byt))
-	if err == nil {
+	if err != nil {
 		t.Error("Expect nil, got ", err)
 	}
 

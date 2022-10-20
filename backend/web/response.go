@@ -4,11 +4,11 @@ import "backend/desafio/database"
 
 // ResponseBodyJSONDefault ...
 type ResponseBodyJSONDefault struct {
-	CodResposta int    `json:"codResposta"`
-	Mensagem    string `json:"mensagem"`
+	CodResponse int    `json:"codResponse"`
+	Message     string `json:"message"`
 }
 
 type ProdutoresResponse struct {
 	ResponseBodyJSONDefault
-	Produtores []database.Produtor
+	Producers []database.Producer `json:"producers"`
 }

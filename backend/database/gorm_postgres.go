@@ -13,39 +13,39 @@ type gormPostgres struct {
 	db *gorm.DB
 }
 
-type Transacao struct {
+type Transaction struct {
 	gorm.Model
 	//ID         int
-	TipoID     int
-	Tipo       TipoTransacao `gorm:"foreignKey:TipoID"`
-	Data       time.Time
-	Produto    string
-	Valor      float64
-	ProdutorID int
+	TypeID     int
+	Type       TypeTransaction `gorm:"foreignKey:TypeID"`
+	Date       time.Time
+	Product    string
+	Value      float64
+	ProducerID int
 }
 
-type TipoTransacao struct {
-	Tipo      int `gorm:"primaryKey"`
-	Descricao string
-	Natureza  string
+type TypeTransaction struct {
+	Type        int `gorm:"primaryKey"`
+	Description string
+	Nature      string
 }
 
-type Produtor struct {
-	ID         int
-	Nome       string
-	Transacoes []Transacao
+type Producer struct {
+	ID           int
+	Name         string
+	Transactions []Transaction
 }
 
-func (Transacao) TableName() string {
-	return "TRANSCAO"
+func (Transaction) TableName() string {
+	return "TRANSACTION"
 }
 
-func (TipoTransacao) TableName() string {
-	return "TIPO_TRANSACAO"
+func (TypeTransaction) TableName() string {
+	return "TYPE_TRANSACTION"
 }
 
-func (Produtor) TableName() string {
-	return "PRODUTOR"
+func (Producer) TableName() string {
+	return "PRODUCER"
 }
 func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	i := 0
@@ -53,16 +53,16 @@ func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	for {
 		db, err := gorm.Open(postgres.Open(config.URL), &gorm.Config{})
 		if err != nil {
-			if i >= 3 {
+			if i >= 4 {
 				return err
 			} else {
 				i++
 			}
-			time.Sleep(1000 * time.Millisecond)
+			time.Sleep(time.Second * 5)
 
 		} else {
 			gm.db = db
-			log.Println("Conectou ao DB")
+			log.Println("Connect on DataBase")
 			break
 		}
 
@@ -71,12 +71,13 @@ func (gm *gormPostgres) connectService(config *OptionsDBClient) error {
 	return nil
 }
 
-func (gm *gormPostgres) GetTransacao(key interface{}) (Produtor, error) {
-	produtor := &Produtor{}
-	result := gm.db.Preload("Transacoes").Preload("Transacoes.Tipo").First(produtor, key.(int))
+func (gm *gormPostgres) GetTransaction(key interface{}) (Producer, error) {
+	produtor := &Producer{}
+	result := gm.db.Preload("Transactions").Preload("Transactions.Type").First(produtor, key.(int))
 	return *produtor, result.Error
 }
-func (gm *gormPostgres) CreateTransacao(produtores []*Produtor) error {
+
+func (gm *gormPostgres) CreateTransaction(produtores []*Producer) error {
 	tx := gm.db.Begin()
 	for _, produtor := range produtores {
 		if err := gm.createProdutor(produtor, tx); err != nil {
@@ -89,16 +90,16 @@ func (gm *gormPostgres) CreateTransacao(produtores []*Produtor) error {
 	return nil
 }
 
-func (gm *gormPostgres) ListTransacao() ([]Produtor, error) {
-	produtores := make([]Produtor, 0)
-	result := gm.db.Preload("Transacoes").Preload("Transacoes.Tipo").Find(&produtores)
+func (gm *gormPostgres) ListTransaction() ([]Producer, error) {
+	produtores := make([]Producer, 0)
+	result := gm.db.Preload("Transactions").Preload("Transactions.Type").Find(&produtores)
 	return produtores, result.Error
 
 }
 
-func (gm *gormPostgres) createProdutor(produtor *Produtor, tx *gorm.DB) error {
-	prd := &Produtor{}
-	err := gm.db.Where("nome = ?", produtor.Nome).First(prd).Error
+func (gm *gormPostgres) createProdutor(produtor *Producer, tx *gorm.DB) error {
+	prd := &Producer{}
+	err := gm.db.Where("name = ?", produtor.Name).First(prd).Error
 	if err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return err
@@ -114,9 +115,9 @@ func (gm *gormPostgres) createProdutor(produtor *Produtor, tx *gorm.DB) error {
 
 }
 
-// func (gm *gormPostgres) getProdutor(tipoID int)(TipoTransacao, error){
+// func (gm *gormPostgres) getProdutor(tipoID int)(TypeTransaction, error){
 
-// 		tipoTrans := &TipoTransacao{}
+// 		tipoTrans := &TypeTransaction{}
 
 // 		gm.db.G
 

@@ -18,54 +18,53 @@ type Handler struct {
 	Database *database.IDataBase
 }
 
-func (h *Handler) CadastrarTransacoes(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateTransactions(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 	var buf bytes.Buffer
 	file, _, err := r.FormFile("file")
 	if err != nil {
-		h.CoreRespondErro(w, r, "", errors.New("Arquivo com formato inválido"), "ErrCadPlaneta", http.StatusBadRequest)
+		h.CoreRespondErro(w, r, "", errors.New("Invalid format file"), "Error on create transaction", http.StatusBadRequest)
 		return
 	}
 
 	defer file.Close()
 	io.Copy(&buf, file)
 	contents := buf.String()
-	//fmt.Println("DEPOIS -------- ", contents)
+
 	produtores, err := handleTransactionData(contents)
 	if err != nil {
-		h.CoreRespondErro(w, r, "", err, "Erro ao descompactar", http.StatusBadRequest)
+		h.CoreRespondErro(w, r, "", err, "Error on unpack file", http.StatusBadRequest)
 		return
 	}
-	//db := *h.Database
 
-	err = (*h.Database).CreateTransacao(produtores)
+	err = (*h.Database).CreateTransaction(produtores)
 	if err != nil {
-		h.CoreRespondErro(w, r, "", errors.New("Arquivo com formato inválido"), "ErrCadPlaneta", http.StatusBadRequest)
+		h.CoreRespondErro(w, r, "", errors.New("Invalid format file"), "Error on create transaction", http.StatusBadRequest)
 		return
 	}
 
 	bit, _ := json.Marshal(produtores)
 	fmt.Println(string(bit))
-	h.CoreRespondSucess(w, r, http.StatusCreated, ResponseBodyJSONDefault{CodResposta: http.StatusCreated, Mensagem: "Transações Cadastradas"})
+	h.CoreRespondSucess(w, r, http.StatusCreated, ResponseBodyJSONDefault{CodResponse: http.StatusCreated, Message: "Transactions Created"})
 	return
 
 }
 
 func (h *Handler) ListarTransacoes(w http.ResponseWriter, r *http.Request) {
 
-	produtores, err := (*h.Database).ListTransacao()
+	produtores, err := (*h.Database).ListTransaction()
 	if err != nil {
-		h.CoreRespondErro(w, r, "", err, "Erro ao listar transacoes", http.StatusInternalServerError)
+		h.CoreRespondErro(w, r, "", err, "Erro ao listar transactions", http.StatusInternalServerError)
 		return
 	}
 	response := ProdutoresResponse{
-		Produtores: produtores,
+		Producers: produtores,
 		ResponseBodyJSONDefault: ResponseBodyJSONDefault{
-			CodResposta: http.StatusOK,
-			Mensagem:    "Transações retornadas com sucesso",
+			CodResponse: http.StatusOK,
+			Message:     "Transações retornadas com sucesso",
 		},
 	}
-	response.CodResposta = http.StatusOK
+	response.CodResponse = http.StatusOK
 	h.CoreRespondSucess(w, r, http.StatusOK, response)
 	return
 

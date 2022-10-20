@@ -35,7 +35,7 @@ func main() {
 		Driver: configNew.DBDriver,
 	}
 
-	clientDB, errDB := DBOpt.ConfiguraDatabase()
+	clientDB, errDB := DBOpt.ConfigDatabase()
 	if errDB != nil {
 		log.Println(errDB)
 		os.Exit(1)
@@ -43,7 +43,7 @@ func main() {
 	handler.Database = clientDB
 	allowedParam := make(map[string][]string)
 	if err := json.Unmarshal([]byte(`{"Origins":["*"],"Headers":["*"],"Methods":["GET","POST","PUT", "DELETE","OPTIONS"]}`), &allowedParam); err != nil {
-		log.Println("Erro no json Unmarshal do allowedOrigins. Detalhe:", err)
+		log.Println("Error on json Unmarshal do allowedOrigins. Detail:", err)
 		os.Exit(1)
 	}
 
@@ -52,7 +52,7 @@ func main() {
 		AllowedOrigins: allowedParam["Origins"],
 		AllowedHeaders: allowedParam["Headers"],
 		AllowedMethods: allowedParam["Methods"],
-		// OptionsPassthrough: true,
+
 		Debug: false,
 	})
 	s := &http.Server{
@@ -61,9 +61,9 @@ func main() {
 		ReadTimeout:  TimeOutSecond * time.Second,
 		WriteTimeout: TimeOutSecond * time.Second,
 	}
-	log.Println("Esperando conexão")
+	log.Println("Waiting connection")
 	if err := s.ListenAndServe(); err != nil {
-		log.Println("Erro ao iniciar Server. Erro:", err)
+		log.Println("Error on start the Server. Error:", err)
 		os.Exit(1)
 	}
 }

@@ -17,7 +17,7 @@ func initDataBase() (database.IDataBase, error) {
 		URL:    "postgresql://root:luke@localhost:5434/app",
 		Driver: "postgres",
 	}
-	db, err := DBOpt.ConfiguraDatabase()
+	db, err := DBOpt.ConfigDatabase()
 	return *db, err
 
 }
@@ -41,7 +41,7 @@ func TestCadastrarTransacao(t *testing.T) {
 	file, _ := os.Open("../../sales.txt")
 	io.Copy(fw, file)
 	writer.Close()
-	r := httptest.NewRequest("POST", "/transacoes", bytes.NewReader(body.Bytes()))
+	r := httptest.NewRequest("POST", "/transactions", bytes.NewReader(body.Bytes()))
 	r.Header.Set("Content-Type", writer.FormDataContentType())
 	w := httptest.NewRecorder()
 	hWeb := initHandler()
@@ -54,7 +54,7 @@ func TestCadastrarTransacao(t *testing.T) {
 
 func TestListTransacoes(t *testing.T) {
 	hWeb := initHandler()
-	r := httptest.NewRequest("GET", "/transacoes", nil)
+	r := httptest.NewRequest("GET", "/transactions", nil)
 	w := httptest.NewRecorder()
 	RouterTest(hWeb).ServeHTTP(w, r)
 	data, errBody := ioutil.ReadAll(w.Body)

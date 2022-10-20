@@ -1,18 +1,15 @@
 package database
 
-import (
-	"log"
-	// "time"
-)
+// "time"
 
 // Planet monta a estrututra do plano
 
 // IDataBase ..
 type IDataBase interface {
 	connectService(config *OptionsDBClient) error
-	GetTransacao(key interface{}) (Produtor, error)
-	CreateTransacao(produtores []*Produtor) error
-	ListTransacao() ([]Produtor, error)
+	GetTransaction(key interface{}) (Producer, error)
+	CreateTransaction(produtores []*Producer) error
+	ListTransaction() ([]Producer, error)
 }
 
 // OptionsCacheClient ..
@@ -23,8 +20,8 @@ type OptionsDBClient struct {
 }
 
 // ConfiguraCache
-func (o *OptionsDBClient) ConfiguraDatabase() (*IDataBase, error) {
-	log.Println("Entrou no configura dataBase")
+func (o *OptionsDBClient) ConfigDatabase() (*IDataBase, error) {
+
 	var client IDataBase
 	switch o.Driver {
 	case "postgres":

@@ -11,7 +11,7 @@ import (
 
 var config *Configuracoes
 
-//Configuracoes ...
+// Configuracoes ...
 type Configuracoes struct {
 	Service string `json:"service" env:"SERVICE"`
 
@@ -24,7 +24,7 @@ type Configuracoes struct {
 	DBHost   string `json:"db-host" env:"DB_HOST"`
 }
 
-//NewConfig ...
+// NewConfig ...
 func NewConfig(file string) *Configuracoes {
 	var erro error
 
@@ -37,7 +37,7 @@ func NewConfig(file string) *Configuracoes {
 		if err == nil {
 			erro = json.Unmarshal(bufConf, conf)
 			if erro != nil {
-				log.Println("erro ao configurar -", erro)
+				log.Println("error on configure -", erro)
 			}
 		}
 	}
@@ -50,7 +50,7 @@ func NewConfig(file string) *Configuracoes {
 	return conf
 }
 
-//Config ...
+// Config ...
 func Config() *Configuracoes {
 	return config
 }
