@@ -20,6 +20,9 @@ func handleTransactionData(data string) ([]*database.Producer, error) {
 		if len(line) == 0 {
 			break
 		}
+		if len(line) < 66 {
+			return nil, errors.New("Invalid format file")
+		}
 
 		name := strings.TrimSpace(line[66:])
 		if _, ok := dictProd[name]; !ok {
@@ -57,7 +60,7 @@ func handleTransactionData(data string) ([]*database.Producer, error) {
 
 func sumProducersTransactions(producers []database.Producer) []database.Producer {
 
-	for i, _ := range producers {
+	for i := range producers {
 		for _, transaction := range producers[i].Transactions {
 
 			if transaction.Type.Nature == "Entrada" {

@@ -13,15 +13,12 @@ var config *Configuracoes
 
 // Configuracoes ...
 type Configuracoes struct {
-	Service string `json:"service" env:"SERVICE"`
-
-	Port int `json:"port" env:"PORT"`
-
+	Service      string `json:"service" env:"SERVICE"`
+	Port         int    `json:"port" env:"PORT"`
 	AllowedParam string `json:"allowedParam" env:"ALLOWED_PARAM"`
-
-	DBNome   string `json:"db-nome" env:"DB_NOME"`
-	DBDriver string `json:"db-driver" env:"DB_DRIVER"`
-	DBHost   string `json:"db-host" env:"DB_HOST"`
+	DBNome       string `json:"db-nome" env:"DB_NOME"`
+	DBDriver     string `json:"db-driver" env:"DB_DRIVER"`
+	DBHost       string `json:"db-host" env:"DB_HOST"`
 }
 
 // NewConfig ...

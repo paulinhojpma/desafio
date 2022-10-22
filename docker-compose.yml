@@ -11,7 +11,7 @@ services:
     depends_on:
       - postgres
       - pgadmin
-      - front
+      # - front
   front:
     build:
       dockerfile: Dockerfile

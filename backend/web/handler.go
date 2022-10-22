@@ -39,7 +39,7 @@ func (h *Handler) CreateTransactions(w http.ResponseWriter, r *http.Request) {
 
 	err = (*h.Database).CreateTransaction(produtores)
 	if err != nil {
-		h.CoreRespondErro(w, r, "", errors.New("Invalid format file"), "Error on create transaction", http.StatusBadRequest)
+		h.CoreRespondErro(w, r, "", errors.New("It's is not possible to save the data internal error"), "Error on create transaction", http.StatusInternalServerError)
 		return
 	}
 
@@ -59,7 +59,7 @@ func (h *Handler) ListarTransacoes(w http.ResponseWriter, r *http.Request) {
 	}
 	producers = sumProducersTransactions(producers)
 
-	bit,_ := json.Marshal(producers)
+	bit, _ := json.Marshal(producers)
 	fmt.Println(string(bit))
 	response := ProdutoresResponse{
 		Producers: producers,

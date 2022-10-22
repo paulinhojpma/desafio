@@ -34,7 +34,7 @@ type Producer struct {
 	ID           int
 	Name         string
 	Transactions []Transaction
-	SumTotal     float64
+	SumTotal     float64 `gorm:"-"`
 }
 
 func (Transaction) TableName() string {
