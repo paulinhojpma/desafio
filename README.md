@@ -23,9 +23,14 @@ After acess the URL, you will se an image like that:
 After put a valid file on the form, hit the submit button and the screen below will show up:
 
 ![Tela Tabela](https://drive.google.com/uc?export=view&id=1B4g_nwwokqssWS69w7kNrwhZdwst2yHR)
+
+
+
+
+
 # API Routes 
 
-  This section will show the backend api,
+  This section will show the backend api.
 
 ## Create Transactions
 
@@ -49,6 +54,32 @@ Request Headers: Content-Type multipart/form-data ```
 ### Response
   
 #### Sucess
+HTTP/1.1 201 CREATED
+
+ ```json 
+{"codResponse":201,"message":"Transactions Created"}
+```
+
+#### Fail
+HTTP/1.1 400 BAD REQUEST
+
+ ```json 
+{"resource":"Error on unpack file","code":"400","message":"Invalid format file","idOperation":""}
+```
+  
+ 
+
+
+
+## Retrieve transactions data
+
+### Request  
+
+```GET localhost:8890/transactions```  
+
+### Response
+  
+#### Sucess
 HTTP/1.1 200 OK
 
  ```json 
@@ -61,9 +92,3 @@ HTTP/1.1 500 INTERNAL SERVER ERROR
  ```json 
 {"resource":"There is no transactions","code":"400","message":"Error on retrieve transactions","idOperation":""}
 ```
-  
- 
-
-
-
-
