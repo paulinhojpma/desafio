@@ -36,7 +36,8 @@ After put a valid file on the form, hit the submit button and the screen below w
 
 ### Request  
 
-```POST localhost:8890/transactions
+```
+POST localhost:8890/transactions
 Request Headers: Content-Type multipart/form-data
 
   Request Body: A txt file, example: 
