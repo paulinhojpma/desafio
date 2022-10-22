@@ -54,7 +54,8 @@ func (h *Handler) ListarTransacoes(w http.ResponseWriter, r *http.Request) {
 
 	producers, err := (*h.Database).ListTransaction()
 	if err != nil {
-		h.CoreRespondErro(w, r, "", err, "Erro ao listar transactions", http.StatusInternalServerError)
+		fmt.Println(err)
+		h.CoreRespondErro(w, r, "", errors.New("There is no transactions"), "Error on retrieve transactions", http.StatusInternalServerError)
 		return
 	}
 	producers = sumProducersTransactions(producers)
