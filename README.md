@@ -37,7 +37,7 @@ After put a valid file on the form, hit the submit button and the screen below w
 ### Request  
 
 ```POST localhost:8890/transactions
-Request Headers: Content-Type multipart/form-data ```
+Request Headers: Content-Type multipart/form-data
 
   Request Body: A txt file, example: 
 12022-01-15T19:20:30-03:00CURSO DE BEM-ESTAR            0000012750JOSE CARLOS
@@ -46,7 +46,6 @@ Request Headers: Content-Type multipart/form-data ```
 32022-01-16T14:13:54-03:00CURSO DE BEM-ESTAR            0000004500THIAGO OLIVEIRA
 42022-01-16T14:13:54-03:00CURSO DE BEM-ESTAR            0000004500JOSE CARLOS
 12022-01-22T08:59:13-03:00DOMINANDO INVESTIMENTOS       0000050000MARIA CANDIDA
-
 
 ```
   
